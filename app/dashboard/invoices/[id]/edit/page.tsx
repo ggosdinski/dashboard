@@ -3,16 +3,20 @@ import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
 import { fetchInvoiceById, fetchCustomers } from '@/app/lib/data';
 import { notFound } from 'next/navigation';
 
-export default async function Page({ params }: { params?: { id?: string } }) {
-  if (!params?.id) {
+type PageProps = {
+  params: {
+    id: string;
+  };
+};
+
+export default async function Page({ params }: PageProps) {
+  if (!params.id) {
     return <p className="text-red-500">Error: Invoice ID is missing.</p>;
   }
 
-  const id = params.id;
-
   try {
     const [invoice, customers] = await Promise.all([
-      fetchInvoiceById(id),
+      fetchInvoiceById(params.id),
       fetchCustomers(),
     ]);
 
@@ -27,7 +31,7 @@ export default async function Page({ params }: { params?: { id?: string } }) {
             { label: 'Invoices', href: '/dashboard/invoices' },
             {
               label: 'Edit Invoice',
-              href: `/dashboard/invoices/${id}/edit`,
+              href: `/dashboard/invoices/${params.id}/edit`,
               active: true,
             },
           ]}
