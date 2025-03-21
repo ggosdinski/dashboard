@@ -9,8 +9,8 @@ type PageProps = {
   };
 };
 
-export default async function Page({ params }: { params: { id: string } }) {
-  if (!params.id) {
+export default async function Page({ params }: PageProps) {
+  if (!params?.id) {
     return <p className="text-red-500">Error: Invoice ID is missing.</p>;
   }
 
@@ -21,7 +21,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     ]);
 
     if (!invoice) {
-      notFound();
+      return notFound();
     }
 
     return (
