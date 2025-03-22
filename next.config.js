@@ -1,12 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    images: {
-      unoptimized: true, // Esto desactiva la optimización automática de imágenes
-    },
-  };
-  
-  module.exports = {
-    eslint: {
-      ignoreDuringBuilds: true,
-    },
-  };
+  images: {
+    unoptimized: true, // Desactiva la optimización de imágenes
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+};
+
+module.exports = nextConfig;
