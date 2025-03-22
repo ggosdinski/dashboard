@@ -10,7 +10,7 @@ import {
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
-import { useActionState } from 'react'; // Corrección: usar useActionState en lugar de useFormState
+import { useActionState } from 'react';
 
 export default function EditInvoiceForm({
   invoice,
@@ -19,9 +19,13 @@ export default function EditInvoiceForm({
   invoice: InvoiceForm;
   customers: CustomerField[];
 }) {
-  const initialState = { message: null, errors: {} };
-  const updateInvoiceWithId = updateInvoice.bind(null, invoice.id);
-  const [state, dispatch] = useActionState(updateInvoiceWithId, initialState); // Cambio aquí
+  const initialState = { message: "", errors: {} };
+
+  // Corrección: Usar una función inline en lugar de bind
+  const [state, dispatch] = useActionState(
+    async (formData) => await updateInvoice(invoice.id, formData),
+    initialState
+  );
 
   return (
     <form action={dispatch}>
@@ -68,7 +72,7 @@ export default function EditInvoiceForm({
               />
               <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
-            {state.errors?.amount ? (
+            {state.errors?.amount && (
               <div
                 id="customer-error"
                 aria-live="polite"
@@ -78,7 +82,7 @@ export default function EditInvoiceForm({
                   <p key={error}>{error}</p>
                 ))}
               </div>
-            ) : null}
+            )}
           </div>
         </div>
 
@@ -96,11 +100,11 @@ export default function EditInvoiceForm({
                   type="radio"
                   value="pending"
                   defaultChecked={invoice.status === 'pending'}
-                  className="h-4 w-4 border-gray-300 bg-gray-100 text-gray-600 focus:ring-2 focus:ring-gray-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-gray-600"
+                  className="h-4 w-4 border-gray-300 bg-gray-100 text-gray-600 focus:ring-2 focus:ring-gray-500"
                 />
                 <label
                   htmlFor="pending"
-                  className="ml-2 flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600 dark:text-gray-300"
+                  className="ml-2 flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
                 >
                   Pending <ClockIcon className="h-4 w-4" />
                 </label>
@@ -112,11 +116,11 @@ export default function EditInvoiceForm({
                   type="radio"
                   value="paid"
                   defaultChecked={invoice.status === 'paid'}
-                  className="h-4 w-4 border-gray-300 bg-gray-100 text-gray-600 focus:ring-2 focus:ring-gray-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-gray-600"
+                  className="h-4 w-4 border-gray-300 bg-gray-100 text-gray-600 focus:ring-2 focus:ring-gray-500"
                 />
                 <label
                   htmlFor="paid"
-                  className="ml-2 flex items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white dark:text-gray-300"
+                  className="ml-2 flex items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
                 >
                   Paid <CheckIcon className="h-4 w-4" />
                 </label>
